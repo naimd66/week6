@@ -25,3 +25,27 @@
     name: docker
     enabled: yes
     state: started
+
+---
+- name: Create user testuser
+  user:
+    name: testuser
+    shell: /bin/bash
+    state: present
+    groups: sudo
+
+- name: Create .ssh directory
+  file:
+    path: /home/testuser/.ssh
+    state: directory
+    owner: testuser
+    group: testuser
+    mode: '0700'
+
+- name: Add authorized key
+  copy:
+    src: /home/student/.ssh/id_rsa.pub
+    dest: /home/testuser/.ssh/authorized_keys
+    owner: testuser
+    group: testuser
+    mode: '0600'
