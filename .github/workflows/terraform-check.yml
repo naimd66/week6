@@ -1,0 +1,16 @@
+name: Terraform Lint Check
+
+on:
+  push:
+    paths:
+      - '**.tf'
+
+jobs:
+  tflint:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          tflint

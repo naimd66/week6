@@ -1,0 +1,11 @@
+- hosts: all
+  become: yes
+  roles:
+    - role-docker
+
+  tasks:
+    - name: Run Hello World container
+      docker_container:
+        name: hello
+        image: hello-world
+        state: started

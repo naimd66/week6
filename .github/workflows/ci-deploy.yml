@@ -1,0 +1,17 @@
+name: CI Deploy Hybrid
+
+on:
+  push:
+    paths:
+      - '**.yml'
+      - '**.tf'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Ansible playbook
+        run: |
+          ansible-playbook -i inventory.ini deploy.yml
