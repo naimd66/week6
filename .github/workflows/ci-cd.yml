@@ -1,0 +1,29 @@
+name: CI/CD Infra en Config
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+      - 'ansible/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Terraform Format
+        run: terraform fmt -check terraform/
+      - name: Ansible Syntax Check
+        run: ansible-playbook --syntax-check ansible/playbook.yml -i ansible/inventory.ini
+
+  deploy:
+    needs: validate
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Terraform apply
+        run: cd terraform && terraform apply -auto-approve
+      - name: Ansible provisioning
+        run: ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
